@@ -5,7 +5,6 @@ from fastapi import FastAPI
 # =========================
 from app.routes.transaction import router as transaction_router
 
-
 # =========================
 # ROTAS DE ANÁLISE
 # =========================
@@ -19,6 +18,10 @@ from app.routes.cidade import router as cidade_router
 from app.routes.comparacao_dispositivo import router as comp_router
 from app.routes.valor_suspeito import router as valor_router
 
+# =========================
+# ROTAS DE ML
+# =========================
+from app.routes.predicao import router as predicao_router
 
 # =========================
 # APP FASTAPI
@@ -32,7 +35,6 @@ app = FastAPI(
 # =========================
 app.include_router(transaction_router)
 
-
 app.include_router(dispositivo_router, tags=["Analise"])
 app.include_router(tentativas_router, tags=["Analise"])
 app.include_router(conta_router, tags=["Analise"])
@@ -43,6 +45,10 @@ app.include_router(cidade_router, tags=["Analise"])
 app.include_router(comp_router, tags=["Analise"])
 app.include_router(valor_router, tags=["Analise"])
 
+# =========================
+# INCLUDE ROUTERS (ML)
+# =========================
+app.include_router(predicao_router, tags=["ML - Deteccao de Fraude"])
 
 # =========================
 # HOME (opcional)
