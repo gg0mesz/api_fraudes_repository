@@ -1,12 +1,16 @@
-import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.engine import URL
 
-load_dotenv()
+url = URL.create(
+    drivername="mysql+pymysql",
+    username="root",
+    password="Lautaro@10",
+    host="localhost",
+    port=3306,
+    database="bancodobrasil"
+)
 
-DATABASE_URL = "mysql+pymysql://root:mysqlroot@localhost:3306/bancodobrasil"
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(url)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
