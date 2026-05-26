@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fraud Detection — BB Squad 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --text: #e8e8e8;
+      --muted: #555;
+      --accent: #f5c400;
+      --red: #ff4444;
+      --green: #00cc66;
+      --yellow: #f5c400;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    header {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+
+    header h1 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+    }
+
+    .card h2 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    input, select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    select option { background: var(--surface); }
+
+    button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 14px 28px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s;
+    }
+
+    button:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .result { display: none; }
+    .result.show { display: block; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .badge.fraude { background: var(--red); color: #fff; }
+    .badge.normal { background: var(--green); color: #000; }
+
+    .risco {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .risco span.alto { color: var(--red); }
+    .risco span.medio { color: var(--yellow); }
+    .risco span.baixo { color: var(--green); }
+
+    .score-line {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .score-line span { color: var(--text); }
+
+    .explicacao {
+      border-left: 2px solid var(--accent);
+      padding-left: 16px;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #ccc;
+      font-weight: 300;
+    }
+
+    .loading {
+      display: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 20px;
+    }
+
+    .loading.show { display: block; }
+
+    .dot-anim::after {
+      content: '';
+      animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: '.'; }
+      33%  { content: '..'; }
+      66%  { content: '...'; }
+      100% { content: ''; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Fraud Detection API</h1>
+  <p>// GrowUp · Banco do Brasil · Squad 01</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>// Dados da Transação</h2>
+    <div class="grid">
+
+      <div class="field">
+        <label>Valor (R$)</label>
+        <input type="number" id="valor" value="8500" step="0.01"/>
+      </div>
+
+      <div class="field">
+        <label>Hora (HH:MM)</label>
+        <input type="text" id="hora" value="02:30" placeholder="02:30"/>
+      </div>
+
+      <div class="field">
+        <label>Tentativas</label>
+        <input type="number" id="tentativas" value="3" min="1"/>
+      </div>
+
+      <div class="field">
+        <label>Latitude</label>
+        <input type="number" id="latitude" value="-15.783659" step="0.000001"/>
+      </div>
+
+      <div class="field">
+        <label>Longitude</label>
+        <input type="number" id="longitude" value="-47.888869" step="0.000001"/>
+      </div>
+
+      <div class="field">
+        <label>Dispositivo</label>
+        <select id="dispositivo">
+          <option value="app_mobile">app_mobile</option>
+          <option value="web">web</option>
+          <option value="caixa_eletronico">caixa_eletronico</option>
+          <option value="terminal_fisico">terminal_fisico</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tipo de Transação</label>
+        <select id="tipo_transacao">
+          <option value="pix">pix</option>
+          <option value="transferencia">transferencia</option>
+          <option value="debito">debito</option>
+          <option value="credito">credito</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Categoria</label>
+        <select id="categoria">
+          <option value="eletronicos">eletronicos</option>
+          <option value="alimentacao">alimentacao</option>
+          <option value="servicos">servicos</option>
+          <option value="lazer">lazer</option>
+          <option value="saude">saude</option>
+          <option value="vestuario">vestuario</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <button id="btn" onclick="analisar()">Analisar Transação</button>
+
+  <div class="loading" id="loading">
+    <span class="dot-anim">Analisando transação</span>
+  </div>
+
+  <div class="card result" id="result">
+    <h2>// Resultado da Análise</h2>
+    <div class="result-header">
+      <span class="badge" id="badge-fraude"></span>
+      <span class="risco">Risco: <span id="nivel-risco"></span></span>
+    </div>
+    <div class="score-line">Score: <span id="score"></span></div>
+    <div class="explicacao" id="explicacao"></div>
+  </div>
+
+</div>
+
+<script>
+  async function analisar() {
+    const btn = document.getElementById('btn');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+
+    btn.disabled = true;
+    loading.classList.add('show');
+    result.classList.remove('show');
+
+    const payload = {
+      valor:          parseFloat(document.getElementById('valor').value),
+      hora:           document.getElementById('hora').value,
+      tentativas:     parseInt(document.getElementById('tentativas').value),
+      latitude:       parseFloat(document.getElementById('latitude').value),
+      longitude:      parseFloat(document.getElementById('longitude').value),
+      dispositivo:    document.getElementById('dispositivo').value,
+      tipo_transacao: document.getElementById('tipo_transacao').value,
+      categoria:      document.getElementById('categoria').value,
+    };
+
+    try {
+      const res = await fetch('http://localhost:8000/analisar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      const badge = document.getElementById('badge-fraude');
+      badge.textContent = data.is_fraude ? 'Fraude Detectada' : 'Transação Normal';
+      badge.className = 'badge ' + (data.is_fraude ? 'fraude' : 'normal');
+
+      const nivelEl = document.getElementById('nivel-risco');
+      nivelEl.textContent = data.nivel_risco;
+      nivelEl.className = data.nivel_risco.toLowerCase();
+
+      document.getElementById('score').textContent = data.score;
+      document.getElementById('explicacao').textContent = data.explicacao;
+
+      result.classList.add('show');
+    } catch (e) {
+      alert('Erro ao conectar com a API. Verifique se está rodando em localhost:8000');
+    } finally {
+      btn.disabled = false;
+      loading.classList.remove('show');
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # =========================
 # ROTAS PRINCIPAIS
@@ -28,6 +29,16 @@ from app.routes.predicao import router as predicao_router
 # =========================
 app = FastAPI(
     title="Fraud Transactions API"
+)
+
+# =========================
+# CORS
+# =========================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # =========================
