@@ -23,6 +23,7 @@ from app.routes.valor_suspeito import router as valor_router
 # ROTAS DE ML
 # =========================
 from app.routes.predicao import router as predicao_router
+from app.routes.metricas import router as metricas_router
 
 # =========================
 # APP FASTAPI
@@ -60,6 +61,7 @@ app.include_router(valor_router, tags=["Analise"])
 # INCLUDE ROUTERS (ML)
 # =========================
 app.include_router(predicao_router, tags=["ML - Deteccao de Fraude"])
+app.include_router(metricas_router, tags=["ML - Deteccao de Fraude"])
 
 # =========================
 # HOME (opcional)

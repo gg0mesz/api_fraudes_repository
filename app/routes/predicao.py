@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import List
 from app.ml.predicao import prever_fraude
 
 router = APIRouter()
+
 
 class TransacaoInput(BaseModel):
     valor: float
@@ -14,13 +16,28 @@ class TransacaoInput(BaseModel):
     tipo_transacao: str
     categoria: str
 
+
+class Recomendacao(BaseModel):
+    acao: str
+    descricao: str
+    cor: str
+
+
 class PredicaoOutput(BaseModel):
     is_fraude: bool
     score: float
+    confianca: float
     nivel_risco: str
+    motivos: List[str]
+    recomendacao: Recomendacao
     explicacao: str
 
-@router.post("/analisar", response_model=PredicaoOutput, summary="Analisa se uma transação é suspeita")
+
+@router.post(
+    "/analisar",
+    response_model=PredicaoOutput,
+    summary="Analisa se uma transação é suspeita"
+)
 def analisar_transacao(transacao: TransacaoInput):
     try:
         return prever_fraude(transacao.model_dump())
