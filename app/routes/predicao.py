@@ -7,11 +7,13 @@ router = APIRouter()
 
 
 class TransacaoInput(BaseModel):
+    conta: str = ""
     valor: float
     hora: str
     tentativas: int
     latitude: float
     longitude: float
+    cidade: str = ""
     dispositivo: str
     tipo_transacao: str
     categoria: str
@@ -26,6 +28,7 @@ class Recomendacao(BaseModel):
 class PredicaoOutput(BaseModel):
     is_fraude: bool
     score: float
+    score_normalizado: float
     confianca: float
     nivel_risco: str
     motivos: List[str]

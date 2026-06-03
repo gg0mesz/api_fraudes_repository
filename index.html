@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fraud Detection — BB Squad 01</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
@@ -25,17 +25,89 @@
       color: var(--text);
       font-family: 'IBM Plex Sans', sans-serif;
       min-height: 100vh;
-      padding: 40px 20px;
     }
 
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-box h1 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .login-box p {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .login-field label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .login-field input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .login-field input:focus { border-color: var(--accent); }
+
+    .login-error {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--red);
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* ── MAIN APP ── */
+    #app { display: none; padding: 40px 20px; }
+
     header {
-      max-width: 700px;
+      max-width: 900px;
       margin: 0 auto 40px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 24px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
     }
 
     header h1 {
@@ -49,56 +121,60 @@
 
     header p {
       color: var(--muted);
-      font-size: 0.85rem;
-      margin-top: 6px;
+      font-size: 0.8rem;
+      margin-top: 4px;
       font-family: 'IBM Plex Mono', monospace;
     }
 
-    .metricas-header {
-      display: flex;
-      gap: 20px;
+    .logout-btn {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      text-align: right;
+      background: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
     }
 
-    .metricas-header span { color: var(--accent); display: block; font-size: 1rem; font-weight: 600; }
+    .logout-btn:hover { color: var(--text); border-color: var(--muted); }
 
-    .container {
-      max-width: 700px;
+    .main-grid {
+      max-width: 900px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 24px;
     }
+
+    @media (max-width: 700px) { .main-grid { grid-template-columns: 1fr; } }
+
+    .col { display: flex; flex-direction: column; gap: 24px; }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 28px;
+      padding: 24px;
     }
 
     .card h2 {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
     .field.full { grid-column: 1 / -1; }
 
     label {
-      font-size: 0.72rem;
+      font-size: 0.65rem;
       color: var(--muted);
       font-family: 'IBM Plex Mono', monospace;
       text-transform: uppercase;
@@ -109,9 +185,9 @@
       background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 9px 11px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       outline: none;
       transition: border-color 0.2s;
       width: 100%;
@@ -120,13 +196,13 @@
     input:focus, select:focus { border-color: var(--accent); }
     select option { background: var(--surface); }
 
-    button {
+    button.primary {
       background: var(--accent);
       color: #000;
       border: none;
-      padding: 14px 28px;
+      padding: 13px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -135,25 +211,20 @@
       transition: opacity 0.2s;
     }
 
-    button:hover { opacity: 0.85; }
-    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    button.primary:hover { opacity: 0.85; }
+    button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
+    /* Resultado */
     .result { display: none; }
-    .result.show { display: block; }
+    .result.show { display: flex; flex-direction: column; gap: 16px; }
 
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+    .result-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
     .badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      padding: 4px 12px;
+      padding: 4px 10px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
@@ -161,51 +232,30 @@
     .badge.fraude { background: var(--red); color: #fff; }
     .badge.normal { background: var(--green); color: #000; }
 
-    .risco {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
+    .risco { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+    .risco span.alto   { color: var(--red); font-weight: 600; }
+    .risco span.medio  { color: var(--yellow); font-weight: 600; }
+    .risco span.baixo  { color: var(--green); font-weight: 600; }
 
-    .risco span.alto   { color: var(--red); }
-    .risco span.medio  { color: var(--yellow); }
-    .risco span.baixo  { color: var(--green); }
-
-    .info-line {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
+    .info-line { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted); }
     .info-line span { color: var(--text); }
 
-    .confianca-bar {
-      height: 4px;
-      background: var(--border);
-      margin-bottom: 20px;
-      margin-top: 4px;
-    }
-
-    .confianca-fill {
-      height: 100%;
-      transition: width 0.5s ease;
-    }
+    .bar-wrap { background: var(--border); height: 3px; }
+    .bar-fill  { height: 100%; transition: width 0.5s ease; }
 
     .recomendacao {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
+      gap: 10px;
+      padding: 10px 14px;
       border: 1px solid var(--border);
-      margin-bottom: 20px;
     }
 
     .acao-badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
-      padding: 3px 10px;
+      padding: 3px 8px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       white-space: nowrap;
@@ -215,65 +265,69 @@
     .acao-badge.amarelo  { background: var(--yellow); color: #000; }
     .acao-badge.verde    { background: var(--green); color: #000; }
 
-    .acao-descricao {
-      font-size: 0.8rem;
-      color: #aaa;
-    }
-
-    .motivos {
-      margin-bottom: 20px;
-    }
-
-    .motivos ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .motivos ul li {
-      font-size: 0.8rem;
-      color: #aaa;
-      font-family: 'IBM Plex Mono', monospace;
-      padding-left: 12px;
-      border-left: 2px solid var(--border);
-    }
-
-    .motivos ul li::before {
-      content: '→ ';
-      color: var(--accent);
-    }
-
-    .explicacao {
-      border-left: 2px solid var(--accent);
-      padding-left: 16px;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      color: #ccc;
-      font-weight: 300;
-    }
+    .acao-descricao { font-size: 0.75rem; color: #aaa; }
 
     .section-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
-    .loading {
-      display: none;
+    .motivos-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .motivos-list li {
+      font-size: 0.75rem;
+      color: #aaa;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-align: center;
-      padding: 20px;
+      padding-left: 10px;
+      border-left: 2px solid var(--border);
+    }
+    .motivos-list li::before { content: '→ '; color: var(--accent); }
+
+    .explicacao {
+      border-left: 2px solid var(--accent);
+      padding-left: 14px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #ccc;
     }
 
-    .loading.show { display: block; }
+    /* Transações do banco */
+    .loading-db {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding: 16px 0;
+    }
 
-    .dot-anim::after {
+    .tx-list { display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto; }
+
+    .tx-item {
+      border: 1px solid var(--border);
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .tx-item:hover { border-color: var(--accent); }
+
+    .tx-item.fraude { border-left: 3px solid var(--red); }
+    .tx-item.normal { border-left: 3px solid var(--green); }
+
+    .tx-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .tx-conta { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--accent); }
+    .tx-valor { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; font-weight: 600; }
+    .tx-info  { font-size: 0.7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+
+    .loading-anim::after {
       content: '';
       animation: dots 1.5s infinite;
     }
@@ -284,139 +338,252 @@
       66%  { content: '...'; }
       100% { content: ''; }
     }
+
+    .loading-overlay {
+      display: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    .loading-overlay.show { display: block; }
   </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <h1>Fraud Detection API</h1>
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Fraud Detection</h1>
     <p>// GrowUp · Banco do Brasil · Squad 01</p>
+
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="login-user" value="admin" placeholder="admin"/>
+    </div>
+
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') fazerLogin()"/>
+    </div>
+
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+
+    <button class="primary" onclick="fazerLogin()">Entrar</button>
   </div>
-  <div class="metricas-header" id="metricas-header"></div>
-</header>
+</div>
 
-<div class="container">
+<!-- APP -->
+<div id="app">
+  <header>
+    <div>
+      <h1>Fraud Detection API</h1>
+      <p>// GrowUp · Banco do Brasil · Squad 01</p>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </header>
 
-  <div class="card">
-    <h2>// Dados da Transação</h2>
-    <div class="grid">
+  <div class="main-grid">
 
-      <div class="field">
-        <label>Valor (R$)</label>
-        <input type="number" id="valor" value="8500" step="0.01"/>
+    <!-- COLUNA ESQUERDA: formulário + resultado -->
+    <div class="col">
+
+      <div class="card">
+        <h2>// Analisar Transação</h2>
+        <div class="grid2">
+
+          <div class="field">
+            <label>Conta</label>
+            <input type="text" id="conta" placeholder="ex: 45678-9"/>
+          </div>
+
+          <div class="field">
+            <label>Valor (R$)</label>
+            <input type="number" id="valor" value="8500" step="0.01"/>
+          </div>
+
+          <div class="field">
+            <label>Hora (HH:MM)</label>
+            <input type="text" id="hora" value="02:30"/>
+          </div>
+
+          <div class="field">
+            <label>Tentativas</label>
+            <input type="number" id="tentativas" value="3" min="1"/>
+          </div>
+
+          <div class="field">
+            <label>Latitude</label>
+            <input type="number" id="latitude" value="-15.783659" step="0.000001"/>
+          </div>
+
+          <div class="field">
+            <label>Longitude</label>
+            <input type="number" id="longitude" value="-47.888869" step="0.000001"/>
+          </div>
+
+          <div class="field">
+            <label>Cidade</label>
+            <input type="text" id="cidade" placeholder="ex: Recife"/>
+          </div>
+
+          <div class="field">
+            <label>Dispositivo</label>
+            <select id="dispositivo">
+              <option value="app_mobile">app_mobile</option>
+              <option value="web">web</option>
+              <option value="caixa_eletronico">caixa_eletronico</option>
+              <option value="terminal_fisico">terminal_fisico</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Tipo de Transação</label>
+            <select id="tipo_transacao">
+              <option value="pix">pix</option>
+              <option value="transferencia">transferencia</option>
+              <option value="debito">debito</option>
+              <option value="credito">credito</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Categoria</label>
+            <select id="categoria">
+              <option value="eletronicos">eletronicos</option>
+              <option value="alimentacao">alimentacao</option>
+              <option value="servicos">servicos</option>
+              <option value="lazer">lazer</option>
+              <option value="saude">saude</option>
+              <option value="vestuario">vestuario</option>
+            </select>
+          </div>
+
+        </div>
       </div>
 
-      <div class="field">
-        <label>Hora (HH:MM)</label>
-        <input type="text" id="hora" value="02:30" placeholder="02:30"/>
+      <button class="primary" id="btn-analisar" onclick="analisar()">Analisar Transação</button>
+
+      <div class="loading-overlay" id="loading-analise">
+        <span class="loading-anim">Analisando com IA</span>
       </div>
 
-      <div class="field">
-        <label>Tentativas</label>
-        <input type="number" id="tentativas" value="3" min="1"/>
-      </div>
+      <div class="card result" id="result">
+        <h2>// Resultado da Análise</h2>
 
-      <div class="field">
-        <label>Latitude</label>
-        <input type="number" id="latitude" value="-15.783659" step="0.000001"/>
-      </div>
+        <div class="result-header">
+          <span class="badge" id="badge-fraude"></span>
+          <span class="risco">Risco: <span id="nivel-risco"></span></span>
+        </div>
 
-      <div class="field">
-        <label>Longitude</label>
-        <input type="number" id="longitude" value="-47.888869" step="0.000001"/>
-      </div>
+        <div class="info-line">Score bruto: <span id="score"></span></div>
+        <div class="info-line">Score normalizado: <span id="score-norm"></span>/100</div>
+        <div class="info-line">Confiança: <span id="confianca"></span>%</div>
+        <div class="bar-wrap"><div class="bar-fill" id="confianca-fill"></div></div>
 
-      <div class="field">
-        <label>Dispositivo</label>
-        <select id="dispositivo">
-          <option value="app_mobile">app_mobile</option>
-          <option value="web">web</option>
-          <option value="caixa_eletronico">caixa_eletronico</option>
-          <option value="terminal_fisico">terminal_fisico</option>
-        </select>
-      </div>
+        <div class="recomendacao">
+          <span class="acao-badge" id="acao-badge"></span>
+          <span class="acao-descricao" id="acao-descricao"></span>
+        </div>
 
-      <div class="field">
-        <label>Tipo de Transação</label>
-        <select id="tipo_transacao">
-          <option value="pix">pix</option>
-          <option value="transferencia">transferencia</option>
-          <option value="debito">debito</option>
-          <option value="credito">credito</option>
-        </select>
-      </div>
+        <div class="section-label">Fatores identificados</div>
+        <ul class="motivos-list" id="motivos-list"></ul>
 
-      <div class="field">
-        <label>Categoria</label>
-        <select id="categoria">
-          <option value="eletronicos">eletronicos</option>
-          <option value="alimentacao">alimentacao</option>
-          <option value="servicos">servicos</option>
-          <option value="lazer">lazer</option>
-          <option value="saude">saude</option>
-          <option value="vestuario">vestuario</option>
-        </select>
+        <div class="section-label" style="margin-top:16px">Parecer técnico da IA</div>
+        <div class="explicacao" id="explicacao"></div>
       </div>
 
     </div>
+
+    <!-- COLUNA DIREITA: transações do banco -->
+    <div class="col">
+      <div class="card">
+        <h2>// Transações do Banco</h2>
+        <div class="loading-db" id="loading-db">
+          <span class="loading-anim">Carregando dados</span>
+        </div>
+        <div class="tx-list" id="tx-list"></div>
+      </div>
+    </div>
+
   </div>
-
-  <button id="btn" onclick="analisar()">Analisar Transação</button>
-
-  <div class="loading" id="loading">
-    <span class="dot-anim">Analisando transação</span>
-  </div>
-
-  <div class="card result" id="result">
-    <h2>// Resultado da Análise</h2>
-
-    <div class="result-header">
-      <span class="badge" id="badge-fraude"></span>
-      <span class="risco">Risco: <span id="nivel-risco"></span></span>
-    </div>
-
-    <div class="info-line">Score: <span id="score"></span></div>
-    <div class="info-line">Confiança do modelo: <span id="confianca"></span>%</div>
-    <div class="confianca-bar">
-      <div class="confianca-fill" id="confianca-fill"></div>
-    </div>
-
-    <div class="recomendacao" id="recomendacao">
-      <span class="acao-badge" id="acao-badge"></span>
-      <span class="acao-descricao" id="acao-descricao"></span>
-    </div>
-
-    <div class="motivos" id="motivos-box">
-      <div class="section-label">Fatores identificados</div>
-      <ul id="motivos-list"></ul>
-    </div>
-
-    <div class="section-label">Parecer técnico</div>
-    <div class="explicacao" id="explicacao"></div>
-  </div>
-
 </div>
 
 <script>
-  // Carrega métricas do modelo ao abrir a página
-  async function carregarMetricas() {
-    try {
-      const res = await fetch('http://localhost:8000/ml/metricas');
-      const m = await res.json();
-      document.getElementById('metricas-header').innerHTML = `
-        <div><span>${m.acuracia}%</span>acurácia</div>
-        <div><span>${m.precisao}%</span>precisão</div>
-        <div><span>${m.recall}%</span>recall</div>
-      `;
-    } catch (e) {}
+  const SENHA_CORRETA = 'Lautaro@10';
+
+  function fazerLogin() {
+    const senha = document.getElementById('login-pass').value;
+    const erro  = document.getElementById('login-error');
+
+    if (senha === SENHA_CORRETA) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      carregarTransacoes();
+    } else {
+      erro.style.display = 'block';
+    }
   }
 
-  carregarMetricas();
+  function logout() {
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-error').style.display = 'none';
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('result').classList.remove('show');
+  }
+
+  async function carregarTransacoes() {
+    const loadingDb = document.getElementById('loading-db');
+    const txList    = document.getElementById('tx-list');
+    loadingDb.style.display = 'block';
+    txList.innerHTML = '';
+
+    try {
+      const res  = await fetch('http://localhost:8000/transactions');
+      const data = await res.json();
+      const txs  = Array.isArray(data) ? data : (data.transactions || data.data || []);
+
+      loadingDb.style.display = 'none';
+
+      txs.slice(0, 50).forEach(tx => {
+        const div = document.createElement('div');
+        div.className = 'tx-item ' + (tx.is_fraude ? 'fraude' : 'normal');
+        div.innerHTML = `
+          <div class="tx-top">
+            <span class="tx-conta">${tx.conta || '—'}</span>
+            <span class="tx-valor">R$ ${Number(tx.valor).toFixed(2)}</span>
+          </div>
+          <div class="tx-info">${tx.tipo_transacao || ''} · ${tx.categoria || ''} · ${tx.hora || ''} · ${tx.cidade || ''}</div>
+        `;
+        div.onclick = () => preencherFormulario(tx);
+        txList.appendChild(div);
+      });
+
+    } catch(e) {
+      loadingDb.innerHTML = 'Erro ao carregar transações.';
+    }
+  }
+
+  function preencherFormulario(tx) {
+    if (tx.conta)          document.getElementById('conta').value        = tx.conta;
+    if (tx.valor)          document.getElementById('valor').value         = tx.valor;
+    if (tx.hora)           document.getElementById('hora').value          = tx.hora.substring(0,5);
+    if (tx.tentativas)     document.getElementById('tentativas').value    = tx.tentativas;
+    if (tx.latitude)       document.getElementById('latitude').value      = tx.latitude;
+    if (tx.longitude)      document.getElementById('longitude').value     = tx.longitude;
+    if (tx.cidade)         document.getElementById('cidade').value        = tx.cidade;
+    if (tx.dispositivo)    document.getElementById('dispositivo').value   = tx.dispositivo;
+    if (tx.tipo_transacao) document.getElementById('tipo_transacao').value = tx.tipo_transacao;
+    if (tx.categoria)      document.getElementById('categoria').value     = tx.categoria;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   async function analisar() {
-    const btn     = document.getElementById('btn');
-    const loading = document.getElementById('loading');
+    const btn     = document.getElementById('btn-analisar');
+    const loading = document.getElementById('loading-analise');
     const result  = document.getElementById('result');
 
     btn.disabled = true;
@@ -424,11 +591,13 @@
     result.classList.remove('show');
 
     const payload = {
+      conta:          document.getElementById('conta').value,
       valor:          parseFloat(document.getElementById('valor').value),
       hora:           document.getElementById('hora').value,
       tentativas:     parseInt(document.getElementById('tentativas').value),
       latitude:       parseFloat(document.getElementById('latitude').value),
       longitude:      parseFloat(document.getElementById('longitude').value),
+      cidade:         document.getElementById('cidade').value,
       dispositivo:    document.getElementById('dispositivo').value,
       tipo_transacao: document.getElementById('tipo_transacao').value,
       categoria:      document.getElementById('categoria').value,
@@ -443,33 +612,27 @@
 
       const data = await res.json();
 
-      // Badge fraude/normal
       const badge = document.getElementById('badge-fraude');
       badge.textContent = data.is_fraude ? 'Fraude Detectada' : 'Transação Normal';
       badge.className   = 'badge ' + (data.is_fraude ? 'fraude' : 'normal');
 
-      // Nível de risco
       const nivelEl = document.getElementById('nivel-risco');
       nivelEl.textContent = data.nivel_risco;
       nivelEl.className   = data.nivel_risco.toLowerCase();
 
-      // Score e confiança
-      document.getElementById('score').textContent    = data.score;
-      document.getElementById('confianca').textContent = data.confianca;
+      document.getElementById('score').textContent      = data.score;
+      document.getElementById('score-norm').textContent = data.score_normalizado;
+      document.getElementById('confianca').textContent  = data.confianca;
 
-      // Barra de confiança
-      const fill  = document.getElementById('confianca-fill');
-      const cor   = data.confianca >= 80 ? 'var(--red)' : data.confianca >= 60 ? 'var(--yellow)' : 'var(--green)';
+      const fill = document.getElementById('confianca-fill');
       fill.style.width      = data.confianca + '%';
-      fill.style.background = cor;
+      fill.style.background = data.confianca >= 80 ? 'var(--red)' : data.confianca >= 60 ? 'var(--yellow)' : 'var(--green)';
 
-      // Recomendação
       const acaoBadge = document.getElementById('acao-badge');
       acaoBadge.textContent = data.recomendacao.acao;
       acaoBadge.className   = 'acao-badge ' + data.recomendacao.cor;
       document.getElementById('acao-descricao').textContent = data.recomendacao.descricao;
 
-      // Motivos
       const list = document.getElementById('motivos-list');
       list.innerHTML = '';
       data.motivos.forEach(m => {
@@ -478,12 +641,11 @@
         list.appendChild(li);
       });
 
-      // Explicação
       document.getElementById('explicacao').textContent = data.explicacao;
-
       result.classList.add('show');
-    } catch (e) {
-      alert('Erro ao conectar com a API. Verifique se está rodando em localhost:8000');
+
+    } catch(e) {
+      alert('Erro ao conectar com a API.');
     } finally {
       btn.disabled = false;
       loading.classList.remove('show');
