@@ -25,7 +25,7 @@ except Exception as e:
 try:
     conn = mysql.connector.connect(
         host="localhost",
-        user="root",
+        user="bancodobrasil",
         password="Lautaro@10",
         database="bancodobrasil"
     )

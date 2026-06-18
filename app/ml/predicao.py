@@ -27,9 +27,46 @@ def _score_normalizado(score: float) -> float:
 def _buscar_historico(conta: str) -> dict:
     try:
         res = requests.get(f'http://localhost:8000/historico/{conta}', timeout=5)
+        res.raise_for_status()
         return res.json()
     except Exception:
         return {"conta": conta, "total": 0, "perfil": None}
+
+
+def _gerar_explicacao_local(transacao: dict, is_fraude: bool, score: float,
+                            nivel_risco: str, confianca: float, motivos: list,
+                            recomendacao: dict, historico: dict,
+                            desvios: dict) -> str:
+    perfil = historico.get('perfil')
+    total = historico.get('total', 0)
+
+    if perfil and total > 0:
+        comportamento_base = (
+            f"A conta possui {total} transações registradas, com valor médio de R$ {perfil.get('valor_medio', 0):.2f}, "
+            f"valor máximo de R$ {perfil.get('valor_max', 0):.2f}, horário médio de {perfil.get('hora_media', 0):.0f}h e "
+            f"categoria mais comum '{perfil.get('categoria_mais_comum')}'."
+        )
+    else:
+        comportamento_base = (
+            "A conta não possui histórico suficiente no banco para comparar com um padrão individual; "
+            "a análise depende principalmente dos sinais comportamentais da transação atual."
+        )
+
+    motivos_texto = " ".join(f"{motivo}." for motivo in motivos[:4])
+    acao_texto = (
+        f"A recomendação do sistema é {recomendacao['acao'].lower()}, pois o nível de risco foi classificado como "
+        f"{nivel_risco.lower()} com confiança de {confianca}%."
+    )
+
+    if is_fraude:
+        conclusao = "A transação apresenta sinais compatíveis com fraude e foge do padrão esperado para a conta."
+    else:
+        conclusao = "A transação permanece dentro do comportamento esperado, sem desvio relevante suficiente para bloqueio."
+
+    return (
+        f"{comportamento_base} {motivos_texto} {acao_texto} {conclusao} "
+        f"Score bruto: {score:.4f}."
+    ).strip()
 
 
 def _calcular_desvio_comportamental(transacao: dict, perfil: dict) -> dict:
@@ -279,9 +316,16 @@ Parecer técnico:"""
             },
             timeout=60
         )
-        return response.json().get('response', 'Parecer não disponível.')
+        resposta = response.json().get('response', '').strip()
+        if resposta:
+            return resposta
+        return _gerar_explicacao_local(transacao, is_fraude, score, nivel_risco,
+                                       confianca, motivos, recomendacao,
+                                       historico, desvios)
     except Exception:
-        return 'Serviço de IA indisponível no momento.'
+        return _gerar_explicacao_local(transacao, is_fraude, score, nivel_risco,
+                                       confianca, motivos, recomendacao,
+                                       historico, desvios)
 
 
 def prever_fraude(transacao: dict) -> dict:
